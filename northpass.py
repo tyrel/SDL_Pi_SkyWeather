@@ -1,6 +1,7 @@
 import sqlite3
 import time
 import state
+import sys
 
 def log(level, message):
     with sqlite3.connect('/home/pi/data.db') as conn:
@@ -47,7 +48,7 @@ def save_state():
         
             insert_row(cursor, 'weather_indoor_air_quality', int(state.Indoor_AirQuality_Sensor_Value * 100))
             insert_row(cursor, 'weather_outdoor_air_quality', int(state.Outdoor_AirQuality_Sensor_Value * 100))
-            insert_row(cursor, 'weather_daily_outdoor_air_quality', int(state.Hour24_Outdoor_AirQuality_Sensor_Value * 100))
+            insert_row(cursor, 'weather_daily_outdoor_aq', int(state.Hour24_Outdoor_AirQuality_Sensor_Value * 100))
 
             # TODO lightning
 
