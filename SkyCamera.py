@@ -63,7 +63,7 @@ def takeSkyPicture():
         val = util.returnTemperatureCF(state.currentOutsideTemperature)
         OTtval = "{0:0.1f} ".format(val) + util.returnTemperatureCFUnit()
 
-        myText = "SkyWeather %s Wind Speed: %s Wind Gust: %s Temp: %s " % (dt.datetime.now().strftime('%d-%b-%Y %H:%M:%S'),WindStval, WindGtval, OTtval)
+        myText = "North Pass @ %s Wind Speed: %s Gust: %s Temp: %s " % (dt.datetime.now().strftime('%d-%b-%Y %H:%M:%S'),WindStval, WindGtval, OTtval)
 
         # Draw the text
         color = 'rgb(255,255,255)'
@@ -85,20 +85,20 @@ def takeSkyPicture():
         # put button on source image in position (0, 0)
 
         pil_im.paste(button_img, (0, 0))
-        bg_w, bg_h = pil_im.size 
+        #bg_w, bg_h = pil_im.size 
         # WeatherSTEM logo in lower left
-        size = 64
-        WSLimg = Image.open("static/WeatherSTEMLogoSkyBackground.png")
-        WSLimg.thumbnail((size,size),Image.ANTIALIAS)
-        pil_im.paste(WSLimg, (0, bg_h-size))
+        #size = 64
+        #WSLimg = Image.open("static/WeatherSTEMLogoSkyBackground.png")
+        #WSLimg.thumbnail((size,size),Image.ANTIALIAS)
+        #pil_im.paste(WSLimg, (0, bg_h-size))
 
         # SkyWeather log in lower right
-        SWLimg = Image.open("static/SkyWeatherLogoSymbol.png")
-        SWLimg.thumbnail((size,size),Image.ANTIALIAS)
-        pil_im.paste(SWLimg, (bg_w-size, bg_h-size))
+        #SWLimg = Image.open("static/SkyWeatherLogoSymbol.png")
+        #SWLimg.thumbnail((size,size),Image.ANTIALIAS)
+        #pil_im.paste(SWLimg, (bg_w-size, bg_h-size))
 
         # Save the image
-        pil_im.save('static/skycamera.jpg', format= 'JPEG')
+        #pil_im.save('static/skycamera.jpg', format= 'JPEG')
         pil_im.save('static/skycameraprocessed.jpg', format= 'JPEG')
 
         time.sleep(2)

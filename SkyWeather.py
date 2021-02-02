@@ -141,6 +141,7 @@ if (config.runLEDs):
 import TSL2591
 import SDL_Pi_TCA9545
 
+import northpass
 
 ################
 #Establish WeatherSTEMHash
@@ -249,6 +250,8 @@ turnFanOff()
 if (config.TCA9545_I2CMux_Present):
 	 tca9545.write_control_register(TCA9545_CONFIG_BUS3)
 
+print "setup sunlight sensor"
+
 try:
     tsl2591 = TSL2591.Tsl2591()
     int_time=TSL2591.INTEGRATIONTIME_100MS
@@ -326,6 +329,8 @@ PixelLock = threading.Lock()
 ################
 # PiCamera detect
 
+print("Setup camera")
+
 try:
 
     with picamera.PiCamera() as cam:
@@ -345,7 +350,7 @@ I2C_Lock = threading.Lock()
 
 ################
 # SunAirPlus Sensors
-
+print("Setup SunAirPlus")
 
 # the three channels of the INA3221 named for SunAirPlus Solar Power Controller channels (www.switchdoc.com)
 LIPO_BATTERY_CHANNEL = 1
@@ -381,6 +386,7 @@ if (config.TCA9545_I2CMux_Present):
 ###############
 
 # HDC1080 Detection
+print("Setup HDC1080")
 try:
 	hdc1080 = SDL_Pi_HDC1000.SDL_Pi_HDC1000() 
         deviceID = hdc1080.readDeviceID() 
@@ -412,6 +418,7 @@ SDL_MODE_SAMPLE = 0
 #Delay mode means to wait for sampleTime and the average after that time.
 SDL_MODE_DELAY = 1
 
+print("Setup weatherrack")
 # turn I2CBus 0 on
 if (config.TCA9545_I2CMux_Present):
 	tca9545.write_control_register(TCA9545_CONFIG_BUS0)
@@ -424,6 +431,7 @@ weatherStation.setWindMode(SDL_MODE_SAMPLE, 5.0)
 
 ################
 # WXLink Setup
+print("Setup WxLink")
 
 #resetWXLink()
 sys.path.append('./pyRFM')
@@ -470,6 +478,7 @@ state.block2 = ""
 ################
 # DS3231/AT24C32 Setup
 # turn I2CBus 0 on
+print("Setup DS3231/AT24C32")
 if (config.TCA9545_I2CMux_Present):
          tca9545.write_control_register(TCA9545_CONFIG_BUS0)
 
@@ -496,7 +505,7 @@ except IOError as e:
 ################
 
 # BMP280 Setup 
-
+print("Setup BMP280")
 try:
         bmp280 = BMP280.BMP280()
         config.BMP280_Present = True
@@ -510,7 +519,7 @@ except:
 ################
 
 # BME680 Setup 
-
+print("Setup BME680")
 try:
         bme680 = BME680.BME680(BME680.I2C_ADDR_SECONDARY)
         config.BME680_Present = True
@@ -527,7 +536,7 @@ print ("after bme680", config.BME680_Present)
 ################
 
 # OLED SSD_1306 Detection
-
+print("Setup OLED")
 try:
         RST =27
         display = Adafruit_SSD1306.SSD1306_128_64(rst=RST, i2c_address=0x3C)
@@ -624,7 +633,7 @@ as3935LastStatus = ""
 as3935Interrupt = False
 
 
-
+print("Setup AS3935")
 # switch to BUS1 - for low loading ib Base Bus
 if (config.TCA9545_I2CMux_Present):
    	tca9545.write_control_register(TCA9545_CONFIG_BUS1)
@@ -713,6 +722,7 @@ GPIO.add_event_detect(as3935pin, GPIO.RISING, callback=handle_as3935_interrupt)
 ##############
 # Setup SHT30
 # turn I2CBus 0 on
+print("Setup SHT30")
 if (config.TCA9545_I2CMux_Present):
          tca9545.write_control_register(TCA9545_CONFIG_BUS0)
 
@@ -763,6 +773,7 @@ if (config.TCA9545_I2CMux_Present):
 if (config.SHT30_Present == False):  # don't check for AM2315 if you find SHT30
 
     ###############
+    print("Setup AM2315")
 
     # Detect AM2315
     outsideHumidity = 0.0
@@ -1207,6 +1218,8 @@ def sampleWeather():
 	# turn I2CBus 0 on
  	if (config.TCA9545_I2CMux_Present):
          	tca9545.write_control_register(TCA9545_CONFIG_BUS0)
+
+        northpass.save_state()
 
 
 def sampleSunAirPlus():
@@ -1682,6 +1695,8 @@ print ""
 print ""
 print "Program Started at:"+ time.strftime("%Y-%m-%d %H:%M:%S")
 print ""
+
+northpass.log("INFO", "Weather station started up!")
 
 ###############
 #  Turn Dust Sensor Off
