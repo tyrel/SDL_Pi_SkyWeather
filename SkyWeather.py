@@ -1852,6 +1852,7 @@ if (config.DustSensor_Present):
 if (config.Camera_Present):
     scheduler.add_job(SkyCamera.takeSkyPicture, 'interval', seconds=config.INTERVAL_CAM_PICS__SECONDS) 
 
+scheduler.add_job(northpass.save_power_state, 'interval', seconds=5*60)
 
 # start scheduler
 scheduler.start()

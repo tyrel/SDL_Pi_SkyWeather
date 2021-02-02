@@ -21,26 +21,26 @@ def save_state():
             cursor = conn.cursor()
 
             if state.currentOutsideTemperature != 0.0:
-                insert_row(cursor, 'weather_outside_temp', int(state.currentOutsideTemperature * 100))
+                insert_row(cursor, 'weather_outside_temp', int(state.currentOutsideTemperature * 10))
             if state.currentOutsideHumidity != 1:
-                insert_row(cursor, 'weather_outside_humidity', int(state.currentOutsideHumidity * 100))
+                insert_row(cursor, 'weather_outside_humidity', int(state.currentOutsideHumidity * 10))
             if state.currentInsideTemperature != 0.0:
                 insert_row(cursor, 'weather_inside_temp', int(state.currentInsideTemperature * 100))
             if state.currentInsideHumidity != 1:
                 insert_row(cursor, 'weather_inside_humidity', int(state.currentInsideHumidity * 100))
 
-            insert_row(cursor, 'weather_rain_hour', int(state.currentRain60Minutes * 100))
+            insert_row(cursor, 'weather_rain_hour', int(state.currentRain60Minutes))
 
-            insert_row(cursor, 'weather_sunlight_visible', int(state.currentSunlightVisible * 100))
-            insert_row(cursor, 'weather_sunlight_ir', int(state.currentSunlightIR * 100))
-            insert_row(cursor, 'weather_sunlight_uv', int(state.currentSunlightUV * 100))
+            insert_row(cursor, 'weather_sunlight_visible', int(state.currentSunlightVisible))
+            insert_row(cursor, 'weather_sunlight_ir', int(state.currentSunlightIR))
+            insert_row(cursor, 'weather_sunlight_uv', int(state.currentSunlightUV))
             insert_row(cursor, 'weather_sunlight_uvindex', int(state.currentSunlightUVIndex * 100))
 
-            insert_row(cursor, 'weather_wind_speed', int(state.ScurrentWindSpeed * 100))
-            insert_row(cursor, 'weather_wind_gust', int(state.ScurrentWindGust * 100))
-            insert_row(cursor, 'weather_wind_direction', int(state.ScurrentWindDirection * 100))
+            insert_row(cursor, 'weather_wind_speed', int(state.ScurrentWindSpeed * 10))
+            insert_row(cursor, 'weather_wind_gust', int(state.ScurrentWindGust * 10))
+            insert_row(cursor, 'weather_wind_direction', int(state.ScurrentWindDirection * 10))
 
-            insert_row(cursor, 'weather_total_rain', int(state.currentTotalRain * 100))
+            insert_row(cursor, 'weather_total_rain', int(state.currentTotalRain))
         
             insert_row(cursor, 'weather_pressure', int(state.currentBarometricPressure * 100))
             insert_row(cursor, 'weather_altitude', int(state.currentAltitude * 100))
@@ -57,4 +57,21 @@ def save_state():
             e = sys.exc_info()[0]
             print("Exception saving state to SQLite database: %s" % e)
 
+def save_power_state():
+    with sqlite3.connect('/home/pi/data.db') as conn:
+        try:
+            cursor = conn.cursor()
+
+            insert_row(cursor, 'weather_battery_voltage', int(state.batteryVoltage * 100))
+            insert_row(cursor, 'weather_battery_current', int(state.batteryCurrent * 10))
+            insert_row(cursor, 'weather_solar_voltage', int(state.solarVoltage * 100))
+            insert_row(cursor, 'weather_solar_current', int(state.solarCurrent * 10))
+            insert_row(cursor, 'weather_load_voltage', int(state.loadVoltage * 100))
+            insert_row(cursor, 'weather_load_current', int(state.loadCurrent * 10))
+            insert_row(cursor, 'weather_battery_charge', int(state.batteryCharge * 10))
+
+            conn.commit()
+        except:
+            e = sys.exc_info()[0]
+            print("Exception saving state to SQLite database: %s" % e)
 
